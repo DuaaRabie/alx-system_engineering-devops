@@ -1,2 +1,2 @@
 #!/bin/bash
-grep [Ac] | cat Z-e 
+tr 'Ac' 'Ze'
