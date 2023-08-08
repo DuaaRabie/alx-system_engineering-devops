@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -e {{a..n}{p..z}},{{a..n}{p..z}\n} | sort
+echo -e {{{a..n}{p..z}},{{a..n}{p..z}}} | tr " " "\n" | sort
