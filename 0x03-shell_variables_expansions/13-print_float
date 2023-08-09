@@ -1,2 +1,2 @@
 #!/bin/bash
-printf "%dd" $NUM
+printf "%d%d" $NUM
