@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script is displaying Superstitious numbers
+i=0
+while [ $i -lt 20 ]; do
+	echo "$((i+1))"
+	if [ $i -eq 3 ];
+	then
+		echo "bad luck from China"
+	elif [ $i -eq 8 ];
+	then
+		echo "bad luck from Japan"
+	elif [ $i -eq 16 ];
+	then
+		echo "bad luck from Italy"
+	fi
+	i=$((i+1));
+done
