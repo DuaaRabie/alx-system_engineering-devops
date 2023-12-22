@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#This script displaying the contents of current directry
+ls . > list
+for i in `cat list`; do
+	echo "$i"
+done
