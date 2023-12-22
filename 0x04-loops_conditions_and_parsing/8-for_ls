@@ -2,5 +2,6 @@
 #This script displaying the contents of current directry
 list="$(ls .)"
 for i in $list; do
-	echo "$i"
+	after_dash="${i#*-}"
+	echo "$after_dash"
 done
