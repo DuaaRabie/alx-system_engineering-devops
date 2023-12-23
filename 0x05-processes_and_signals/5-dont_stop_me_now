@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 #This script displays to infinity and beyond
-kill -f 4-to_infinity_and_beyond
+pkill 4-to_infinity_and_beyond
