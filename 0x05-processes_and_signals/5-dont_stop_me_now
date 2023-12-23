@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #This script displays to infinity and beyond
-pid=$((pidof 4-to_infinity_and_beyond))
-kill pid
+pid=$(pidof 4-to_infinity_and_beyond)
+kill "$pid"
