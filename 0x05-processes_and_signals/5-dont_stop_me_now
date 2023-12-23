@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 #This script displays to infinity and beyond
-tokill=grep 4-to_infinity_and_beyond
-kill $tokill
+kill < grep 4-to_infinity_and_beyond
