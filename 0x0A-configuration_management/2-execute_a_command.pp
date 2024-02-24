@@ -1,5 +1,7 @@
-#create a manifest that kills a process named killmenow.
-exec { 'kill_killmenow_process':
-  command => 'pkill killmenow',
-  onlyif  => 'pgrep killmenow',
+#create a manifest that kills a process named killmenow
+
+service { 'killmenow':
+  ensure   => 'stopped',
+  provider => 'systemd', # or 'init', depending on your system
 }
+
