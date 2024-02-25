@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#Client configuration file
+
+Host *
+	StrictHostKeyChecking no
+	UserKnownHostsFile ~/.ssh/school
+	ServerAliveInterval 120
+
+Host ubuntu@98.98.98.98
+	HostName	54.86.244.25
+	Port 22
+	User	512939-web-01
