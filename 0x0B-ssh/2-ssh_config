@@ -3,6 +3,7 @@
 
 Host *
 	StrictHostKeyChecking no
+	PasswordAuthentication no:wq
 	UserKnownHostsFile ~/.ssh/school
 	ServerAliveInterval 120
 
