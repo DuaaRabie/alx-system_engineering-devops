@@ -1,9 +1,15 @@
 #Client configuration file (w/ Puppet)
 
-file { '~/.ssh/config':
-  ensure  => file,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-  mode    => '0600',
-  content => template('ssh/client_config.erb'),
+class { 'ssh::client':
+  storeconfigs_enabled => false,
+  options    => {
+    'Host short' => {
+      'User'     => 'my-user',
+      'HostName' => 'extreme.long.and.complicated.hostname.domain.tld',
+    },
+    'Host *' => {
+      'User'               => 'andromeda',
+      'UserKnownHostsFile' => '/dev/null',
+    },
+  },
 }
