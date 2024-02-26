@@ -1,6 +1,6 @@
 #Client configuration file (w/ Puppet)
 
-file { '/home/ubuntu/.ssh/config':
+file { '~/.ssh/config':
   ensure  => file,
   owner   => 'ubuntu',
   group   => 'ubuntu',
