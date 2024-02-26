@@ -1,9 +1,9 @@
 #Client configuration file (w/ Puppet)
 
-::ssh::client::config::user { 'ubuntu':
-  ensure   => present,
-  options  => {
-    'IdentityFile'           => '~/.ssh/school',
-    'PasswordAuthentication' => 'no',
-  }
+file { '/home/ubuntu/.ssh/config':
+  ensure  => file,
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  mode    => '0600',
+  content => template('ssh/client_config.erb'),
 }
