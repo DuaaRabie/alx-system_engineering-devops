@@ -4,12 +4,12 @@ class { 'ssh::client':
   storeconfigs_enabled => false,
   options    => {
     'Host short' => {
-      'User'     => 'my-user',
-      'HostName' => 'extreme.long.and.complicated.hostname.domain.tld',
+      'User'     => 'ubuntu',
+      'HostName' => '54.86.244.25',
     },
     'Host *' => {
-      'User'               => 'andromeda',
-      'UserKnownHostsFile' => '/dev/null',
+      'User'               => 'ubuntu',
+      'UserKnownHostsFile' => '~/.ssh/school',
     },
   },
 }
