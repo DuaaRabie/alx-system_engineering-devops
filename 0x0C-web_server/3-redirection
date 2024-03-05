@@ -1,33 +1,36 @@
 #!/usr/bin/env bash
-#redirection
+#redirection target URL
+REDIRECT_TO="http://example.com"
 
-# Update package lists
-sudo apt-get update -y
+# Define the server block configuration file path
+nginx_site_conf="/etc/nginx/sites-available/default"
 
-# Install Nginx if not already installed
-if ! command -v nginx &> /dev/null
-then
-    sudo apt-get install nginx -y
+# Check if the default server block exists
+if [ ! -f "$nginx_site_conf" ]; then
+    echo "Default Nginx server block not found. Creating a new one."
+    sudo cp /etc/nginx/sites-available/default.bak $nginx_site_conf
 fi
 
-# Create a new configuration file for the redirection
-echo 'server {
-    listen 80;
-    server_name _;
+# Add the redirection location block
+echo "server {" | sudo tee -a $nginx_site_conf
+echo "    listen 80 default_server;" | sudo tee -a $nginx_site_conf
+echo "    listen [::]:80 default_server;" | sudo tee -a $nginx_site_conf
+echo "    server_name _;" | sudo tee -a $nginx_site_conf
+echo "    location /redirect_me {" | sudo tee -a $nginx_site_conf
+echo "        return 301 $REDIRECT_TO;" | sudo tee -a $nginx_site_conf
+echo "    }" | sudo tee -a $nginx_site_conf
+echo "}" | sudo tee -a $nginx_site_conf
 
-    location = /redirect_me {
-        return 301 http://example.com;
-    }
-}' | sudo tee /etc/nginx/sites-available/redirect_me.conf > /dev/null
+# Enable the site
+sudo ln -s $nginx_site_conf /etc/nginx/sites-enabled/
 
-# Enable the new configuration by creating a symbolic link to the sites-enabled directory
-sudo ln -s /etc/nginx/sites-available/redirect_me.conf /etc/nginx/sites-enabled/
+# Test Nginx configuration for syntax errors
+sudo nginx -t
 
-# Test the Nginx configuration for syntax errors
-# If the configuration test is successful, restart Nginx to apply the changes
-if sudo nginx -t; then
-    sudo service nginx restart
-    echo "Nginx has been configured successfully and restarted."
+# If the test is successful, reload Nginx to apply the changes
+if [ $? -eq 0 ]; then
+    sudo systemctl reload nginx
+    echo "Nginx configuration reloaded."
 else
     echo "Nginx configuration test failed. Please check the configuration."
 fi
