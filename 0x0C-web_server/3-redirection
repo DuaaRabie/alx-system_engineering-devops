@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#redirection
+
+# Update package lists
+sudo apt-get update -y
+
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null
+then
+    sudo apt-get install nginx -y
+fi
+
+# Create a new configuration file for the redirection
+echo 'server {
+    listen 80;
+    server_name _;
+
+    location = /redirect_me {
+        return 301 http://example.com;
+    }
+}' | sudo tee /etc/nginx/sites-available/redirect_me.conf > /dev/null
+
+# Enable the new configuration by creating a symbolic link to the sites-enabled directory
+sudo ln -s /etc/nginx/sites-available/redirect_me.conf /etc/nginx/sites-enabled/
+
+# Test the Nginx configuration for syntax errors
+# If the configuration test is successful, restart Nginx to apply the changes
+if sudo nginx -t; then
+    sudo service nginx restart
+    echo "Nginx has been configured successfully and restarted."
+else
+    echo "Nginx configuration test failed. Please check the configuration."
+fi

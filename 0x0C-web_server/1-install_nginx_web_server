@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#install nginx web server
+
+# Update package lists for upgrades and new package installations
+sudo apt-get update
+
+# Install Nginx
+sudo apt-get -y install nginx
+
+# Ensure Nginx is configured to listen on port 80
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Create a simple index.html file with "Hello World!" in the default nginx root directory
+echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
+# Verify Nginx is running and listening on port 80
+sudo netstat -tuln | grep :80
