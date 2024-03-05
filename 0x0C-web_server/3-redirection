@@ -24,10 +24,8 @@ echo 'server {
 sudo ln -s /etc/nginx/sites-available/redirect_me.conf /etc/nginx/sites-enabled/
 
 # Test the Nginx configuration for syntax errors
-sudo nginx -t
-
 # If the configuration test is successful, restart Nginx to apply the changes
-if [ $? -eq 0 ]; then
+if sudo nginx -t; then
     sudo service nginx restart
     echo "Nginx has been configured successfully and restarted."
 else
