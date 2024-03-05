@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#404 error
+
+#!/bin/bash
+
+# Define the path to the default Nginx document root
+nginx_doc_root="/usr/share/nginx/html"
+
+# Define the content for the 404.html page
+page_content="<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>Ceci n'est pas une page</h1>
+    <p>The requested URL was not found on this server.</p>
+</body>
+</html>"
+
+# Create the 404.html file with the specified content
+echo "$page_content" | sudo tee $nginx_doc_root/404.html
+
+# Define the server block configuration file path
+nginx_site_conf="/etc/nginx/sites-available/default"
+
+# Check if the default server block exists
+if [ ! -f "$nginx_site_conf" ]; then
+    echo "Default Nginx server block not found. Creating a new one."
+    sudo cp /etc/nginx/sites-available/default.bak $nginx_site_conf
+fi
+
+# Add the custom 404 location block
+echo "server {" | sudo tee -a $nginx_site_conf
+echo "    listen 80 default_server;" | sudo tee -a $nginx_site_conf
+echo "    listen [::]:80 default_server;" | sudo tee -a $nginx_site_conf
+echo "    server_name _;" | sudo tee -a $nginx_site_conf
+echo "    location / {" | sudo tee -a $nginx_site_conf
+echo "        try_files \$uri \$uri/ =404;" | sudo tee -a $nginx_site_conf
+echo "    }" | sudo tee -a $nginx_site_conf
+echo "    error_page 404 /404.html;" | sudo tee -a $nginx_site_conf
+echo "    location = /404.html {" | sudo tee -a $nginx_site_conf
+echo "        root /var/www/html;" | sudo tee -a $nginx_site_conf
+echo "        internal;" | sudo tee -a $nginx_site_conf
+echo "    }" | sudo tee -a $nginx_site_conf
+echo "}" | sudo tee -a $nginx_site_conf
+
+# Enable the site
+sudo ln -s $nginx_site_conf /etc/nginx/sites-enabled/
+
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# If the test is successful, reload Nginx to apply the changes
+if [ $? -eq 0 ]; then
+    sudo systemctl reload nginx
+    echo "Nginx configuration reloaded."
+else
+    echo "Nginx configuration test failed. Please check the configuration."
+fi
