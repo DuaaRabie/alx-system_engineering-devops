@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#Double the number of webservers
+
+echo "add_header X-Served-By $512939-web-01" >> /etc/nginx/sites-available/default
+echo "add_header X-Served-By $512939-web-02" >> /etc/nginx/sites-available/default
