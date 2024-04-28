@@ -3,11 +3,10 @@
 
 function display_active_ipv4_ips() {
     # Get the list of active IPv4 connections
-    active_ips=$(netstat -ntp | awk '{ print $4 }' | grep -v "127.0.0.1" | cut -d ":" -f1 | grep "^[0-9]" | sort | uniq)
-
+    active_ips=$(netstat -ntp)
     # Iterate over each IP address
     for ip in $active_ips; do
-        echo "Active IPv4: $ip"
+        echo "$ip"
     done
 }
 
