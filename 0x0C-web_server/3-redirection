@@ -17,7 +17,7 @@ sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-availabl
 echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
 # Redirecting /redirect_me to another page
-sed -i '/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}' $NGINX_CONFIG_FILE
+sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
 
 # Restart Nginx without using systemctl
 sudo service nginx restart
