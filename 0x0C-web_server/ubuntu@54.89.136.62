@@ -2,7 +2,6 @@
 #install nginx web server
 TARGET_URL="http://duaalearn.tech/new_page"
 SOURCE_PATH="/redirect_me"
-CUSTOM_404_PATH="/usr/share/nginx/html/custom_404.html"
 NGINX_CONFIG_FILE="/etc/nginx/sites-available/default"
 
 # Update package lists for upgrades and new package installations
@@ -19,12 +18,6 @@ echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
 # Redirecting /redirect_me to another page
 sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
-
-# set custom 404 page
-echo "<html><body><h1>Ceci n'est pas une page</h1></body></html>" > $CUSTOM_404_PATH
-sed -i "s/error_page 404 .*/error_page 404 $CUSTOM_404_PATH;/" $NGINX_CONFIG_FILE
-sed -i "/location = \/custom_404.html {/a \ \ \ \ \ \ \ \ internal;/" $NGINX_CONFIG_FILE
-grep -q "error_page 404" $NGINX_CONFIG_FILE || sed -i "/^server {/a \ \ \ \ \ \ \ \ error_page 404 $CUSTOM_404_PATH;\\n" $NGINX_CONFIG_FILE
 
 # Restart Nginx without using systemctl
 sudo service nginx restart
