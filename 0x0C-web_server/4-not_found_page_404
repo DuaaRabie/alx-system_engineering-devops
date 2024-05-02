@@ -21,10 +21,10 @@ echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
 
 # set custom 404 page
-echo "Ceci n'est pas une page" > $CUSTOM_404_PATH
-sed -i "s/error_page 404 .*/error_page 404 $CUSTOM_404_PATH;/" $NGINX_CONFIG_FILE
-sed -i "/location = \/custom_404.html {/a \ \ \ \ \ \ \ \ internal;/" $NGINX_CONFIG_FILE
-grep -q "error_page 404" $NGINX_CONFIG_FILE || sed -i "/^server {/a \ \ \ \ \ \ \ \ error_page 404 $CUSTOM_404_PATH;\\n" $NGINX_CONFIG_FILE
+sudo echo "Ceci n'est pas une page" > $CUSTOM_404_PATH
+sudo sed -i "s/error_page 404 .*/error_page 404 $CUSTOM_404_PATH;/" $NGINX_CONFIG_FILE
+sudo sed -i "/location = \/custom_404.html {/a \ \ \ \ \ \ \ \ internal;/" $NGINX_CONFIG_FILE
+sudo grep -q "error_page 404" $NGINX_CONFIG_FILE || sudo sed -i "/^server {/a \ \ \ \ \ \ \ \ error_page 404 $CUSTOM_404_PATH;\\n" $NGINX_CONFIG_FILE
 
 # Restart Nginx without using systemctl
 sudo service nginx restart
