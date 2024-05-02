@@ -1,36 +1,26 @@
 #!/usr/bin/env bash
-#redirection target URL
-REDIRECT_TO="http://example.com"
+#install nginx web server
+TARGET_URL="http://duaalearn.tech/new_page"
+SOURCE_PATH="/redirect_me"
+NGINX_CONFIG_FILE="/etc/nginx/sites-available/default"
 
-# Define the server block configuration file path
-nginx_site_conf="/etc/nginx/sites-available/default"
+# Update package lists for upgrades and new package installations
+sudo apt-get update
 
-# Check if the default server block exists
-if [ ! -f "$nginx_site_conf" ]; then
-    echo "Default Nginx server block not found. Creating a new one."
-    sudo cp /etc/nginx/sites-available/default.bak $nginx_site_conf
-fi
+# Install Nginx
+sudo apt-get -y install nginx
 
-# Add the redirection location block
-echo "server {" | sudo tee -a $nginx_site_conf
-echo "    listen 80 default_server;" | sudo tee -a $nginx_site_conf
-echo "    listen [::]:80 default_server;" | sudo tee -a $nginx_site_conf
-echo "    server_name _;" | sudo tee -a $nginx_site_conf
-echo "    location /redirect_me {" | sudo tee -a $nginx_site_conf
-echo "        return 301 $REDIRECT_TO;" | sudo tee -a $nginx_site_conf
-echo "    }" | sudo tee -a $nginx_site_conf
-echo "}" | sudo tee -a $nginx_site_conf
+# Ensure Nginx is configured to listen on port 80
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
 
-# Enable the site
-sudo ln -s $nginx_site_conf /etc/nginx/sites-enabled/
+# Create a simple index.html file with "Hello World!" in the default nginx root directory
+echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
-# Test Nginx configuration for syntax errors
-sudo nginx -t
+# Redirecting /redirect_me to another page
+sed -i '/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}' $NGINX_CONFIG_FILE
 
-# If the test is successful, reload Nginx to apply the changes
-if [ $? -eq 0 ]; then
-    sudo systemctl reload nginx
-    echo "Nginx configuration reloaded."
-else
-    echo "Nginx configuration test failed. Please check the configuration."
-fi
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
+# Verify Nginx is running and listening on port 80
+sudo netstat -tuln | grep :80
