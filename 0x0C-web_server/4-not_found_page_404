@@ -20,17 +20,17 @@ echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
 # Redirecting /redirect_me to another page
 if sudo grep -q "location $SOURCE_PATH" "$NGINX_CONFIG_FILE"; then
-	sudo sed -i "s/location $SOURCE_PATH {.*/{location $SOURCE_PATH {\\\n\t\treturn 301 $TARGET_URL;\\n\t}/" $NGINX_CONFIG_FILE
+	sudo sed -i "s/location $SOURCE_PATH {.*/{location $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}/" $NGINX_CONFIG_FILE
 else
-	sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
+	sudo sed -i "/server_name _;/a \\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
 fi
 
 # set custom 404 page
-sudo echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev/null
-if sudo grep -q "error_page 404 $CUSTOM_404_NAME" "$NGINX_CONFIG_FILE"; then
-	sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t}" $NGINX_CONFIG_FILE
+echo "Ceci n'est pas une page" | sudo tee "$CUSTOM_404_PATH$CUSTOM_404_NAME" > /dev/null
+if sudo grep -q "error_page 404 $CUSTOM_404_NAME;" $NGINX_CONFIG_FILE; then
+	sudo grep -q "location = $CUSTOM_404_NAME" $NGINX_CONFIG_FILE || sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
 else
-	sudo sed -i "/server_name _;/a \\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t}" $NGINX_CONFIG_FILE
+	sudo sed -i "/server_name _;/a \\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
 fi
 
 # Restart Nginx without using systemctl
