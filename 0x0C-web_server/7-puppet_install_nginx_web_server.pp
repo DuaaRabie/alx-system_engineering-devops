@@ -1,29 +1,29 @@
-#Eure Nginx is installed
+# Ensure Nginx is installed
 package { 'nginx':
- ensure => installed,
+ensure => installed,
 }
 
 # Ensure Nginx is running
 service { 'nginx':
- ensure     => running,
- enable     => true,
- hasrestart => true,
- hasstatus  => true,
- require    => Package['nginx'],
+ensure     => running,
+enable     => true,
+hasrestart => true,
+hasstatus  => true,
+require    => Package['nginx'],
 }
 
 #Configure Nginx to listen on port 80
 file { '/etc/nginx/sites-available/default':
- ensure  => file,
- content => template('nginx/default.erb'),
- notify  => Service['nginx'],
+ensure  => file,
+content => template('nginx/default.erb'),
+notify  => Service['nginx'],
 }
 
 # Template for the default Nginx site configuration
 file { '/etc/nginx/sites-available/default.erb':
- ensure => file,
- content => "
- server {
+ensure => file,
+content => "
+server {
  	listen 80 default_server;
  	listen [::]:80 default_server;
 
@@ -39,9 +39,9 @@ file { '/etc/nginx/sites-available/default.erb':
 	location /redirect_me {
 		return 301 http://duaatech.learn;
 	}
- }
- ",
- }
+}
+",
+}
 
 # Ensure the default site is enabled
 file { '/etc/nginx/sites-enabled/default':
