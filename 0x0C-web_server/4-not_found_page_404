@@ -2,7 +2,7 @@
 #install nginx web server
 TARGET_URL="http://duaalearn.tech/new_page"
 SOURCE_PATH="/redirect_me"
-CUSTOM_404_PATH="/usr/share/nginx/html"
+CUSTOM_404_PATH="/var/www/html"
 CUSTOM_404_NAME="/custom_404.html"
 NGINX_CONFIG_FILE="/etc/nginx/sites-available/default"
 
@@ -26,12 +26,11 @@ else
 fi
 
 # set custom 404 page
-# Set custom 404 page
-sudo echo "Ceci n'est pas une page" | sudo tee "$CUSTOM_404_PATH$CUSTOM_404_NAME" > /dev/null
+sudo echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev/null
 if sudo grep -q "error_page 404 $CUSTOM_404_NAME" $NGINX_CONFIG_FILE; then
-	    sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\\n\tlocation = $CUSTOM_404_NAME {\\\n\t\troot $CUSTOM_404_PATH;\\\n\t\tinternal;\\\n\t}" $NGINX_CONFIG_FILE
-    else
-	        sudo sed -i "/server_name _;/a \\\n\terror_page 404 $CUSTOM_404_NAME;\\\n\tlocation = $CUSTOM_404_NAME {\\\n\t\troot $CUSTOM_404_PATH;\\\n\t\tinternal;\\\n\t}" $NGINX_CONFIG_FILE
+	sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\\n\tlocation = $CUSTOM_404_NAME {\\\n\t\troot $CUSTOM_404_PATH;\\\n\t\tinternal;\\\n\t}" $NGINX_CONFIG_FILE
+else
+	sudo sed -i "/server_name _;/a \\\n\terror_page 404 $CUSTOM_404_NAME;\\\n\tlocation = $CUSTOM_404_NAME {\\\n\t\troot $CUSTOM_404_PATH;\\\n\t\tinternal;\\\n\t}" $NGINX_CONFIG_FILE
 fi
 
 # Restart Nginx without using systemctl
