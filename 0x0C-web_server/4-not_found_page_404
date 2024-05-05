@@ -29,7 +29,7 @@ echo "Ceci n'est pas une page" | sudo tee "$CUSTOM_404_PATH$CUSTOM_404_NAME" > /
 if sudo grep -q "error_page 404 $CUSTOM_404_NAME;" $NGINX_CONFIG_FILE; then
 	sudo grep -q "location = $CUSTOM_404_NAME" $NGINX_CONFIG_FILE || sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
 else
-	sudo sed -i "return 301 $TARGET_URL;\\n\t}/a \\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
+	sudo sed -i "/return 301 $TARGET_URL;\\n\t}/a \\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
 fi
 
 # Restart Nginx without using systemctl
