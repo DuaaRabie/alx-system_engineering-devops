@@ -37,7 +37,7 @@ file { '/etc/nginx/sites-available/default.erb':
 	}
 
 	location /redirect_me {
-	return 301 http://your_target_url;
+		return 301 http://duaatech.learn;
 	}
  }
  ",
