@@ -1,6 +1,12 @@
+# update system
+exec { 'update system':
+	command => '/usr/bin/apt-get update',
+}
+
 # Ensure Nginx is installed
 package { 'nginx':
-ensure => installed,
+	ensure  => installed,
+	require => Exec['update system'] 
 }
 
 # Ensure Nginx is running
@@ -64,7 +70,7 @@ file { '/var/www/html':
 
 # Create a simple index.html file
 file { '/var/www/html/index.html':
- ensure  => file,
- content => '<html><body><h1>Hello World!</h1></body></html>',
- require => File['/var/www/html'],
+	ensure  => file,
+	content => 'Hello World!'
+	require => File['/var/www/html'],
 }
