@@ -1,4 +1,5 @@
-nstall nginx web server
+#!/usr/bin/env bash
+#install nginx web server
 TARGET_URL="http://duaalearn.tech/new_page"
 SOURCE_PATH="/redirect_me"
 CUSTOM_404_PATH="/var/www/html"
