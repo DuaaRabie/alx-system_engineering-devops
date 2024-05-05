@@ -17,7 +17,11 @@ sudo sed -i 's/listen 80 .*;/listen 80;/g' /etc/nginx/sites-available/default
 echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
 # Redirecting /redirect_me to another page
-sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
+if sudo grep -q "location $SOURCE_PATH" "$NGINX_CONFIG_FILE"; then
+	sudo sed -i "s/location $SOURCE_PATH {.*/{location $SOURCE_PATH {\\\n\t\treturn 301 $TARGET_URL;\\n\t}/" $NGINX_CONFIG_FILE
+else
+	sudo sed -i "/server_name _;/a \\\n\tlocation $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
+fi
 
 # Restart Nginx without using systemctl
 sudo service nginx restart
