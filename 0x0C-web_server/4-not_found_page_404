@@ -27,7 +27,7 @@ fi
 
 # set custom 404 page
 sudo echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev/null
-if sudo grep -q "error_page 404 $CUSTOM_404_NAME" $NGINX_CONFIG_FILE; then
+if sudo grep -q "error_page 404 $CUSTOM_404_NAME" "$NGINX_CONFIG_FILE"; then
 	sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
 else
 	sudo sed -i "/server_name _;/a \\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
