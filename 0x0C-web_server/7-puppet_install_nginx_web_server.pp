@@ -1,44 +1,70 @@
-# Install Nginx
-class { 'nginx':
- ensure => 'present',
+#Eure Nginx is installed
+package { 'nginx':
+ ensure => installed,
 }
 
 # Ensure Nginx is running
 service { 'nginx':
- ensure     => 'running',
+ ensure     => running,
  enable     => true,
- require    => Class['nginx'],
+ hasrestart => true,
+ hasstatus  => true,
+ require    => Package['nginx'],
 }
 
-# Define a file resource for the index.html file
-file { '/var/www/html/index.html':
- ensure => 'present',
- content => '<!DOCTYPE html><html><head><title>Hello World!</title></head><body><h1>Hello World!</h1></body></html>',
- require => File['/var/www/html'],
-}
-
-# Define a file resource for the Nginx configuration
+#Configure Nginx to listen on port 80
 file { '/etc/nginx/sites-available/default':
- ensure => 'present',
+ ensure  => file,
  content => template('nginx/default.erb'),
- notify => Service['nginx'],
+ notify  => Service['nginx'],
 }
+
+# Template for the default Nginx site configuration
+file { '/etc/nginx/sites-available/default.erb':
+ ensure => file,
+ content => "
+ server {
+ 	listen 80 default_server;
+ 	listen [::]:80 default_server;
+
+ 	root /var/www/html;
+ 	index index.html index.htm index.nginx-debian.html;
+
+ 	server_name _;
+
+ 	location / {
+ 		try_files \$uri \$uri/ =404;
+	}
+
+	location /redirect_me {
+	return 301 http://your_target_url;
+	}
+ }
+ ",
+ }
 
 # Ensure the default site is enabled
-nginx::resource::server { 'default':
- ensure => 'present',
- listen_port => 80,
- server_name => 'localhost',
- www_root => '/var/www/html',
- index_files => ['index.html'],
+file { '/etc/nginx/sites-enabled/default':
+ ensure  => link,
+ target  => '/etc/nginx/sites-available/default',
+ require => File['/etc/nginx/sites-available/default'],
+ notify  => Service['nginx'],
 }
 
-# Set up a 301 redirect for /redirect_me
-nginx::resource::location { 'redirect_me':
- ensure          => 'present',
- server          => 'default',
- location        => '/redirect_me',
- location_cfg_append => {
-    'return' => '301 http://example.com',
- },
+#Ensure the default site is removed from sites-enabled if it's a broken link
+file { '/etc/nginx/sites-enabled/default':
+ ensure  => absent,
+ require => File['/etc/nginx/sites-available/default'],
+}
+
+# Create the root directory for the default site
+file { '/var/www/html':
+ ensure => directory,
+}
+
+# Create a simple index.html file
+file { '/var/www/html/index.html':
+ ensure  => file,
+ content => '<html><body><h1>Hello World!</h1></body></html>',
+ require => File['/var/www/html'],
 }
