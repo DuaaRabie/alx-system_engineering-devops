@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 # solve curl: (52) Empty reply from server for holbertonschool/265-0 docker image
-# note that this image already made index.html return "hello Holberton"
 service apache2 start
