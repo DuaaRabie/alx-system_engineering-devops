@@ -4,4 +4,4 @@
 # this script must use after connecting to the container
 rm /usr/local/apache2/htdocs/html.index
 echo "<html><body><h1>Hello Holberton</h1></body></html>" > /usr/local/apache2/htdocs/html.index
-sudo service apache2 start
+service apache2 start
