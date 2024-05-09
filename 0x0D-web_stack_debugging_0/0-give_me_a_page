@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 # solve curl: (52) Empty reply from server for holbertonschool/265-0 docker image
 # note that this image already made index.html return "hello Holberton"
-rm /usr/local/apache2/htdocs/html.index
-echo "<html><body><h1>apache2 is running</h1></body></html>" > /usr/local/apache2/htdocs/html.index
 service apache2 start
