@@ -3,5 +3,5 @@
 # note that this image already made index.html return "hello Holberton"
 # this script must use after connecting to the container
 rm /usr/local/apache2/htdocs/html.index
-echo "<html><body><h1>Hello Holberton</h1></body></html>" > /usr/local/apache2/htdocs/html.index
+echo "<html><body><h1>apache2 is running</h1></body></html>" > /usr/local/apache2/htdocs/html.index
 service apache2 start
