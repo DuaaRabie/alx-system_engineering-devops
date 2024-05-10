@@ -5,6 +5,9 @@ apt-get update
 # Install NGINX
 apt-get install -y nginx
 
+# Create a simple HTML file to serve
+echo "<html><body><h1>Hello, World!</h1></body></html>" > /var/www/html/index.html
+
 # Create a temporary NGINX configuration file
 cat <<EOF > /tmp/nginx.conf
 server {
