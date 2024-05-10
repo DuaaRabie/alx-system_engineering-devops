@@ -24,8 +24,8 @@ EOF
 # Start NGINX with the temporary configuration
 nginx -c /tmp/nginx.conf
 
+#Restart server
+sudo service nginx restart
+
 # Verify NGINX is listening on port 80
 netstat -tuln | grep :80
-
-#start nginx
-sudo systemctl start nginx
