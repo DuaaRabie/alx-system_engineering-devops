@@ -26,3 +26,6 @@ nginx -c /tmp/nginx.conf
 
 # Verify NGINX is listening on port 80
 netstat -tuln | grep :80
+
+#start nginx
+sudo systemctl start nginx
