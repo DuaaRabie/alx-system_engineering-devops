@@ -31,13 +31,13 @@ file { '/etc/nginx/sites-available/default':
 	}
  }
  ',
- require => Package['inginx'],
+ require => Package['nginx'],
 }
 
 # Create a simple index.html file
 file { '/var/www/html/index.html':
  content => 'Hello World!',
- require => File['/var/www/html'],
+ require => Package['nginx'],
 }
 
 # Ensure Nginx is installed
