@@ -5,7 +5,7 @@ exec { 'update system':
 
 # Ensure Nginx is installed
 package { 'nginx':
- ensure  => installed,
+ ensure  => 'installed',
  require => Exec['update system'] 
 }
 
