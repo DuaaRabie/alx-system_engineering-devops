@@ -9,12 +9,6 @@ package { 'nginx':
  require => Exec['update system'] 
 }
 
-# Ensure Nginx is running
-service { 'nginx':
- ensure     => running,
- require    => Package['nginx'],
-}
-
 # Template for the default Nginx site configuration
 file { '/etc/nginx/sites-available/default':
  content => '
@@ -23,7 +17,7 @@ file { '/etc/nginx/sites-available/default':
  	listen [::]:80 default_server;
 
  	location / {
- 		try_files \$uri \$uri/ =404;
+ 		return 200 "Hello World!\n";
 	}
 	
 	location /redirect_me {
@@ -40,8 +34,8 @@ file { '/var/www/html/index.html':
  require => Package['nginx'],
 }
 
-# Ensure Nginx is installed
+# Ensure Nginx is running
  package { 'nginx':
  ensure  => running,
- require => Exec['update system']
+ require => Package['nginx']
 }
