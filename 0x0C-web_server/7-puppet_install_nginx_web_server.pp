@@ -30,13 +30,8 @@ file { '/etc/nginx/sites-available/default.erb':
 	ensure => file,
 	content => "
 	server {
- 		listen 80 default_server;
+		listen 80 default_server;
  		listen [::]:80 default_server;
-
- 		root /var/www/html;
- 		index index.html index.htm index.nginx-debian.html;
-
- 		server_name _;
 
  		location / {
  			try_files \$uri \$uri/ =404;
@@ -47,6 +42,7 @@ file { '/etc/nginx/sites-available/default.erb':
 		}
 	}
 	",
+	require => Package['inginx'],
 }
 
 # Ensure the default site is enabled
@@ -63,14 +59,9 @@ file { '/etc/nginx/sites-enabled/default':
 	require => File['/etc/nginx/sites-available/default'],
 }
 
-# Create the root directory for the default site
-file { '/var/www/html':
-	ensure => directory,
-}
-
 # Create a simple index.html file
 file { '/var/www/html/index.html':
 	ensure  => file,
-	content => 'Hello World!'
+	content => 'Hello World!',
 	require => File['/var/www/html'],
 }
