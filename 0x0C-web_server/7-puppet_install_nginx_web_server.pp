@@ -42,6 +42,6 @@ file { '/var/www/html/index.html':
 
 # Ensure Nginx is installed
  package { 'nginx':
- ensure  => installed,
+ ensure  => running,
  require => Exec['update system']
 }
