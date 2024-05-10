@@ -10,22 +10,25 @@ echo "<html><body><h1>Hello, World!</h1></body></html>" > /var/www/html/index.ht
 
 # Create a temporary NGINX configuration file
 cat <<EOF > /tmp/nginx.conf
-server {
-    listen 80;
-    server_name localhost;
+events {
+    worker_connections 1024;
+}
 
-    location / {
-        root /var/www/html;
-        index index.html;
+http {
+    server {
+        listen 80;
+        server_name localhost;
+
+        location / {
+            root /var/www/html;
+            index index.html;
+        }
     }
 }
 EOF
 
 # Start NGINX with the temporary configuration
 nginx -c /tmp/nginx.conf
-
-#Restart server
-sudo service nginx restart
 
 # Verify NGINX is listening on port 80
 netstat -tuln | grep :80
