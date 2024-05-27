@@ -27,7 +27,7 @@ sudo echo "server {
 
 	server_name _;
 
-	add_header X-Served-By $(hostname);
+	add_header X-Served-By $hostname;
 
 	error_page 404 /custom_404.html;
 	location = /custom_404.html {
