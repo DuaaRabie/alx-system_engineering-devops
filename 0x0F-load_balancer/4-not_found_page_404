@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#install nginx web server
+TARGET_URL="http://duaalearn.tech/new_page"
+SOURCE_PATH="/redirect_me"
+CUSTOM_404_PATH="/var/www/html"
+CUSTOM_404_NAME="/custom_404.html"
+NGINX_CONFIG_FILE="/etc/nginx/sites-available/default"
+
+# Update package lists for upgrades and new package installations
+sudo apt-get update
+
+# Install Nginx
+sudo apt-get -y install nginx
+
+# Ensure Nginx is configured to listen on port 80
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Create a simple index.html file with "Hello World!" in the default nginx root directory
+echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+
+# Redirecting /redirect_me to another page
+if ! sudo grep -q "location = $SOURCE_PATH" "$NGINX_CONFIG_FILE"; then
+	sudo sed -i "/server_name _;/a \\\n\tlocation = $SOURCE_PATH {\\n\t\treturn 301 $TARGET_URL;\\n\t}" $NGINX_CONFIG_FILE
+fi
+
+# set custom 404 page
+sudo touch /var/www/html/custom_404.html
+echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev/null
+if sudo grep -q "error_page 404 $CUSTOM_404_NAME;" $NGINX_CONFIG_FILE; then
+	sudo grep -q "location = $CUSTOM_404_NAME" $NGINX_CONFIG_FILE || sudo sed -i "/error_page 404 $CUSTOM_404_NAME;/a \\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
+else
+	sudo sed -i "/server_name _;/a \\\n\terror_page 404 $CUSTOM_404_NAME;\\n\tlocation = $CUSTOM_404_NAME {\\n\t\troot $CUSTOM_404_PATH;\\n\t\tinternal;\\n\t}" $NGINX_CONFIG_FILE
+fi
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
+# Verify Nginx is running and listening on port 80
+sudo netstat -tuln | grep :80
