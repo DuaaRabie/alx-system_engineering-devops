@@ -25,9 +25,9 @@ sudo echo "server {
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
 
-	server_name web-02.example.com;
+	server_name _;
 
-	add_header X-Served-By 512939-web-01;
+	add_header X-Served-By $(hostname);
 
 	error_page 404 /custom_404.html;
 	location = /custom_404.html {
@@ -35,13 +35,12 @@ sudo echo "server {
 		internal;
 	}
 
-	location / {
-		root /var/www/html;
-		index index.html index.htm;
-	}
-	
 	location = /redirect_me {
 		return 301 http://duaalearn.tech/new_page;
+	}
+	
+	location / {
+		try_files $uri $uri/ =404;
 	}
 
 }" | sudo tee /etc/nginx/sites-available/new > /dev/null
