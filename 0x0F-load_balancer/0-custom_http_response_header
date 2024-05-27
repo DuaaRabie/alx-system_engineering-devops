@@ -4,6 +4,9 @@
 # Update package lists for upgrades and new package installations
 sudo apt-get update
 
+# remove default_server from the default configuration
+sudo sed -i 's/default_server;/;;/g' /etc/nginx/sites-available/default
+
 # Install Nginx
 sudo apt-get -y install nginx
 
@@ -18,7 +21,7 @@ echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev
 
 # create a new configuration file
 sudo echo "server {
-	listen 80;
+	listen 80 default_server;
 	
 	root /var/www/html;
 
@@ -27,8 +30,7 @@ sudo echo "server {
 
 	server_name _;
 
-	add_header X-Served-By $hostname;
-
+	add_header X-Served-By $(hostname);
 	error_page 404 /custom_404.html;
 	location = /custom_404.html {
 		root /var/www/html;
