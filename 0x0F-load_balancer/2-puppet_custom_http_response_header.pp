@@ -31,7 +31,7 @@ file { '/etc/nginx/sites-available/new':
 				root /var/www/html;
 				internal;
 			}
-		}
+		}"
 }
 
 service { 'nginx':
