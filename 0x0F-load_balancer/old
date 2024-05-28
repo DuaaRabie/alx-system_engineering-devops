@@ -1,4 +1,4 @@
-#usr/bin/env bash
+#!/usr/bin/env bash
 #install nginx web server
 
 # Update package lists for upgrades and new package installations
@@ -22,8 +22,7 @@ echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 echo "Ceci n'est pas une page" | sudo tee "/var/www/html/custom_404.html" > /dev/null
 
 # create a new configuration file
-cat << EOF | sudo tee /etc/nginx/sites-available/new > /dev/null
-server {
+sudo echo "server {
 	listen 80 default_server;
 	
 	root /var/www/html;
@@ -33,29 +32,31 @@ server {
 
 	server_name _;
 
-	add_header X-Served-By 512939-web-02;
+	add_header X-Served-By $(hostname);
 	error_page 404 /custom_404.html;
 	location = /custom_404.html {
 		root /var/www/html;
 		internal;
 	}
-	
+
 	location = /redirect_me {
 		return 301 http://duaalearn.tech/new_page;
 	}
-
+	
 	location / {
-		try_files $uri $uri/ =404;	
+		try_files $uri $uri/ =404;
 	}
 
-}
-EOF
+}" | sudo tee /etc/ngnix/sites-available/new > /dev/null
 
 # Enable the new configuration "link"
 if [ -f /etc/nginx/sites-available/default ]; then
-	sudo rm /etc/nginx/sites-enabled/default
+	sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
 fi
-sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
 
+if [![ -f /etc/nginx/sites-available/new ]]; then
+	sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
+fi
+	
 # Reload nginx
 sudo service nginx reload
