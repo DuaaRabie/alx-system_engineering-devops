@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#usr/bin/env bash
 #install nginx web server
 
 # Update package lists for upgrades and new package installations
@@ -33,7 +33,7 @@ server {
 
 	server_name _;
 
-	add_header X-Served-By \$host;
+	add_header X-Served-By 512939-web-02;
 	error_page 404 /custom_404.html;
 	location = /custom_404.html {
 		root /var/www/html;
@@ -56,7 +56,7 @@ if [ -f /etc/nginx/sites-available/default ]; then
 	sudo rm /etc/nginx/sites-enabled/default
 fi
 
-if [! [ -f /etc/nginx/sites-enabled/new ] ]; then
+if [[ ! -f /etc/nginx/sites-enabled/new ]]; then
 	sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
 fi
 
