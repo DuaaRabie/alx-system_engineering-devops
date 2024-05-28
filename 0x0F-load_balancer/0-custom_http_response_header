@@ -4,14 +4,16 @@
 # Update package lists for upgrades and new package installations
 sudo apt-get update
 
-# remove default_server from the default configuration
-sudo sed -i 's/default_server;/;;/g' /etc/nginx/sites-available/default
-
 # Install Nginx
 sudo apt-get -y install nginx
 
 # start nginx
 sudo service nginx start
+
+# remove default_server from the default configuration
+if [ -f /etc/nginx/sites-available/default ]; then
+	sudo sed -i 's/default_server;/;/g' /etc/nginx/sites-available/default
+fi
 
 # Create a simple index.html file with "Hello World!" in the default nginx root directory
 echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
@@ -45,10 +47,16 @@ sudo echo "server {
 		try_files $uri $uri/ =404;
 	}
 
-}" | sudo tee /etc/nginx/sites-available/new > /dev/null
+}" | sudo tee /etc/ngnix/sites-available/new > /dev/null
 
 # Enable the new configuration "link"
-sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
+if [ -f /etc/nginx/sites-available/default ]; then
+	sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
+fi
 
+if [![ -f /etc/nginx/sites-available/new ]]; then
+	sudo ln -s /etc/nginx/sites-available/new /etc/nginx/sites-enabled/
+fi
+	
 # Reload nginx
 sudo service nginx reload
