@@ -10,7 +10,7 @@ package { 'nginx':
 }
 
 file { '/var/www/html/custom_404.html':
-	ensure  => file,
+	ensure  => 'file',
 	content => "Ceci n'est pas une page",
 }
 
@@ -39,7 +39,7 @@ server {
 }
 
 service { 'nginx':
-	ensure  => running,
-	ensure  => true,
+	ensure  => 'running',
+	enable  => true,
 	require => Package['nginx'],
 }
