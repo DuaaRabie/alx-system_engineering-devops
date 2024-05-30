@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # automate task-0
 
 exec { 'update system':
