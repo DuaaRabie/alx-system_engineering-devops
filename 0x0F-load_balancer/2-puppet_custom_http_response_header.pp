@@ -5,7 +5,7 @@ exec { 'update system':
 }
 
 package { 'nginx':
-	ensute  => 'installed',
+	ensure  => 'installed',
 	requie  => Exec['update system'],
 }
 
