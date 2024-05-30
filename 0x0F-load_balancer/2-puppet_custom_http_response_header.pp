@@ -9,15 +9,15 @@ package { 'nginx':
 	require  => Exec['update system'],
 }
 
-file { '/var/www/html/custom_404.html':
-	ensure  => 'file',
-	content => "Ceci n'est pas une page",
-}
+#file { '/var/www/html/custom_404.html':
+#	ensure  => 'file',
+#	content => "Ceci n'est pas une page",
+#}
 
-file { '/var/www/html/index.html':
-	content => 'Hello World!',
-	require => Package['nginx'],
-}
+#file { '/var/www/html/index.html':
+#	content => 'Hello World!',
+#	require => Package['nginx'],
+#}
 
 file { '/etc/nginx/sites-available/default':
 	content => '
@@ -28,14 +28,14 @@ server {
 	index index.html index.htm index.nginx-debian.html;
 	server_name _;
 	add_header X-Served-By \$host;
-	error_page 404 /custom_404.html;
-	location = /custom_404.html {
-		root /var/www/html;
-		internal;
-	}
-	location /redirect_me {
-		return 301 http://duaatech.learn/new_page;
-	}
+	#error_page 404 /custom_404.html;
+	#location = /custom_404.html {
+	#	root /var/www/html;
+	#	internal;
+	#}
+	#location /redirect_me {
+	#	return 301 http://duaatech.learn/new_page;
+	#}
 	
 	location / {
 		try_files \$uri \$uri/ =404;
