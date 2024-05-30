@@ -24,7 +24,7 @@ file { '/var/www/html/index.html':
 	require => Package['nginx'],
 }
 
-file { '/etc/nginx/sites-available/new':
+file { '/etc/nginx/sites-available/default':
 	ensure => file,
 	owner => 'root',
 	group => 'root',
