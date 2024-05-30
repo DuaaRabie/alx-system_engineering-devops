@@ -39,7 +39,7 @@ server {
 }
 
 service { 'nginx':
-	ensure  => 'running',
+	ensure  => running,
 	ensure  => true,
 	require => Package['nginx'],
 }
