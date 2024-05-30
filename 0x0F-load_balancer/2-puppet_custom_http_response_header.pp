@@ -34,8 +34,13 @@ server {
 		internal;
 	}
 	location /redirect_me {
-		return 301 http://duaatech.learn;
+		return 301 http://duaatech.learn/new_page;
 	}
+	
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+
 }
 	',
 	require => Package['nginx'],
