@@ -33,6 +33,9 @@ server {
 		root /var/www/html;
 		internal;
 	}
+	location /redirect_me {
+		return 301 http://duaatech.learn;
+	}
 }
 	',
 	require => Package['nginx'],
