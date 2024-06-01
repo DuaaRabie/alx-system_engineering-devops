@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# World wide web
+
+dns_records() {
+	local domain="$1"
+	local subdomain="$2"
+	if [[ -z "$subdomain" ]]; then
+		dig +short "$domain" www.lb-01.web-01.web-02 A
+	else
+		dig +short "$domain" "$subdomain" A
+	fi
+}
+
+if [[ $# -eq 1 ]]; then
+	for subdomain in www lb-01 web-01 web-02; do
+		result=$(fetch_dns_records "$1" "$subdomain")
+		if [[ -n "$result" ]]; then
+			echo "The subdomain [$subdomain] is an A record and points to $result"
+		else
+			echo "No DNS record found for the subdomain [$2]"
+		fi
+	done
+elif [[ $# -eq 2 ]]; then
+	result=$(fetch_dns_records "$1" "$2")
+	if [[ -n "$result" ]]; then
+		echo "The subdomain [$2] is an A record and points to $result"
+	else
+		echo "No DNS record found for the subdomain [$2]"
+	fi
+else
+	echo "Usage: $0 [DOMAIN] [SUBDOMAIN]"
+fi
