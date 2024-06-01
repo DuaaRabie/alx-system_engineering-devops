@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# HAproxy SSL termination
+
+# install certbot
+sudo snap install --classic certbot
+
+# Stop HAproxy
+sudo service haproxy stop
+
+# Generate SSL certificate
+sudo certbot certonly --standalone -d -y www.duaalearn.tech
+
+# Creates the certs dictionary
+sudo mkdir -p /etc/haproxy/certs
+
+# Combine the certificate and the key generated above
+#use a variable to store the domain name
+DOMAIN='www.duaalearn.tech' sudo -E bash -c 'cat /etc/letsencrypt/live/$DOMAIN/fullchain.pem /etc/letsencrypt/live/$DOMAIN/privkey.pem > /etc/haproxy/certs/$DOMAIN.pem'
+
+# change the file mode
+sudo chmod -R go-rwx /etc/haproxy/certs
+
+# add lines to haproxy configuaration file
+sudo sed -e '/bind *:80/a\redirect scheme https code 301 if !{ ssl_fc }' \
+	 -e '/bind *:80/a\tbind *:443 ssl crt \/etc\/haproxy\/certs\/www.duaalearn.tech.pem' \
+	/etc/haproxy/haproxy.cfg
+
+# Check if the configuration file is valid
+sudo haproxy -f /etc/haproxy/haproxy.cfg -c
+
+# Restart HAproxy
+sudo systemctl restart haproxy.service
