@@ -7,13 +7,13 @@ dns_records() {
 	if [[ -z "$subdomain" ]]; then
 		dig +short "$domain" www.lb-01.web-01.web-02 A
 	else
-		dig +short "$domain" "$subdomain" A
+		dig +short "$subdomain" + "." + "$domain"
 	fi
 }
 
 if [[ $# -eq 1 ]]; then
 	for subdomain in www lb-01 web-01 web-02; do
-		result=$(fetch_dns_records "$1" "$subdomain")
+		result=$(dns_records "$1" "$subdomain")
 		if [[ -n "$result" ]]; then
 			echo "The subdomain [$subdomain] is a A record and points to $result"
 		fi
