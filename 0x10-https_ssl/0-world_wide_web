@@ -15,18 +15,12 @@ if [[ $# -eq 1 ]]; then
 	for subdomain in www lb-01 web-01 web-02; do
 		result=$(fetch_dns_records "$1" "$subdomain")
 		if [[ -n "$result" ]]; then
-			echo "The subdomain [$subdomain] is an A record and points to $result"
-		else
-			echo "No DNS record found for the subdomain [$2]"
+			echo "The subdomain [$subdomain] is a A record and points to $result"
 		fi
 	done
-elif [[ $# -eq 2 ]]; then
+else
 	result=$(fetch_dns_records "$1" "$2")
 	if [[ -n "$result" ]]; then
-		echo "The subdomain [$2] is an A record and points to $result"
-	else
-		echo "No DNS record found for the subdomain [$2]"
+		echo "The subdomain [$2] is a A record and points to $result"
 	fi
-else
-	echo "Usage: $0 [DOMAIN] [SUBDOMAIN]"
 fi
