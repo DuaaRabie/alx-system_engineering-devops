@@ -7,7 +7,7 @@ dns_records() {
 	if [[ -z "$subdomain" ]]; then
 		dig +short "$domain" www.lb-01.web-01.web-02 A
 	else
-		dig +short "$domain" "$subdomain" A +trace
+		dig +short "$subdomain.$domain"
 	fi
 }
 
