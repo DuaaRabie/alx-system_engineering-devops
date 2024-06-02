@@ -8,7 +8,7 @@ sudo snap install --classic certbot
 sudo service haproxy stop
 
 # Generate SSL certificate
-sudo certbot certonly --standalone -d -y www.duaalearn.tech
+sudo certbot certonly --standalone -d www.duaalearn.tech
 
 # Creates the certs dictionary
 sudo mkdir -p /etc/haproxy/certs
@@ -21,11 +21,12 @@ DOMAIN='www.duaalearn.tech' sudo -E bash -c 'cat /etc/letsencrypt/live/$DOMAIN/f
 sudo chmod -R go-rwx /etc/haproxy/certs
 
 # add lines to haproxy configuaration file
-sudo sed -e '/bind \*:80/a\\tredirect scheme https code 301 if !{ ssl_fc }' \
-	 -e '/bind \*:80/a\\tbind *:443 ssl crt \/etc\/haproxy\/certs\/www.duaalearn.tech.pem' \
+sudo sed -i '/bind \*:80/a\\tredirect scheme https code 301 if !{ ssl_fc }' /etc/haproxy/haproxy.cfg
+sudo sed -i '/bind \*:80/a\\tbind *:443 ssl crt \/etc\/haproxy\/certs\/www.duaalearn.tech.pem' \
 	/etc/haproxy/haproxy.cfg
 
 # Check if the configuration file is valid
+# sudo openssl dhparam -out /etc/haproxy/dhparams.pem 2048
 sudo haproxy -f /etc/haproxy/haproxy.cfg -c
 
 # Restart HAproxy
