@@ -1,0 +1,10 @@
+frontend myfrontend
+	bind *:80
+	bind *:443 ssl crt /etc/haproxy/certs/www.duaalearn.tech.pem
+	redirect scheme https code 301 if !{ ssl_fc }
+	default_backend myservers
+
+backend myservers
+	balance roundrobin
+	server 512939-web-01 54.89.136.62:80 check
+	server 512939-web-02 54.90.17.23:80 check
