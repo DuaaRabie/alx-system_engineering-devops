@@ -1,7 +1,7 @@
 # fix nginx limit
 
 exec { 'Fix nginx':
-  command  => 'sudo sed -i "s/ULIMIT=\"-n 15\"/ULIMIT=\"-n 3000\"/"',
+  command  => 'sudo sed -i "s/ULIMIT=\"-n 15\"/ULIMIT=\"-n 3000\"/" /etc/default/nginx',
   provider => shell,
 }
 
