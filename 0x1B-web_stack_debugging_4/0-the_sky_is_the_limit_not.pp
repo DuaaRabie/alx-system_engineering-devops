@@ -1,7 +1,7 @@
 # fix nginx limit
 
 exec { 'Fix nginx':
-  command  => 'echo "* hard nofile 400000\n* soft nofile 200000" >> /etc/security/limits.conf',
+  command  => 'sed -i "s/ULIMIT=\"-n 15\"/ULIMIT=\"-n 3000\"/",
   provider => shell,
 }
 
