@@ -1,7 +1,7 @@
 # fix nginx limit
 
 exec { 'Fix nginx':
-  command  => 'echo "* hard nofile 400000\n*soft nofile 200000" >> /etc/security/limits.conf',
+  command  => 'echo "* hard nofile 400000\n* soft nofile 200000" >> /etc/security/limits.conf',
   provider => shell,
 }
 
