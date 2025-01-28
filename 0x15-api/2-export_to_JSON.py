@@ -23,5 +23,5 @@ if __name__ == "__main__":
     }
 
     # Write the data to a JSON file named after the user ID
-    with open("{}.json".format(str(argv[1])), "w") as jsonfile:
+    with open("{}.json".format(argv[1]), "w") as jsonfile:
         json.dump(user_data, jsonfile)
