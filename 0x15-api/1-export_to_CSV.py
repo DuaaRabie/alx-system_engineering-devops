@@ -11,6 +11,6 @@ if __name__ == "__main__":
 
     with open("{}.csv".format(argv[1]), "w") as csvfile:
         writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-        [writer.writerow([argv[1], user.get("username"),
+        for task in todos:
+            writer.writerow([argv[1], user.get("username"),
                           task.get("completed"),task.get("title")])
-            for task in todos]
