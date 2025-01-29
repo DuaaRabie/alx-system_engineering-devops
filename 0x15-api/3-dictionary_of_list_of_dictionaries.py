@@ -5,7 +5,7 @@ import requests
 
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com/"
-    
+
     # Fetch all users (employees)
     users = requests.get(url + "users").json()
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         user_id = str(user.get("id"))
         # Fetch tasks for the current user
         todos = requests.get(url + "todos", params={"userId": user_id}).json()
-        
+
         # Format the tasks data for this user
         all_users_data[user_id] = [{
             "username": user.get("username"),
