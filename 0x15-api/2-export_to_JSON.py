@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # Create a dictionary to hold the user data in the required format
     user_data = {
-        argv[1]: [{
+        user.get("id"): [{
             "task": task.get("title"),
             "completed": task.get("completed"),
             "username": user.get("username")
